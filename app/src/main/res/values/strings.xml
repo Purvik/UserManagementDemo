@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">UserManagementDemo</string>
+    <string name="hint_email">email</string>
+    <string name="hint_password">password</string>
+    <string name="label_login">LOG IN</string>
+    <string name="label_new_user">New User?</string>
+    <string name="label_forgot_password">Forgot Password</string>
+    <string name="label_register">REGISTER</string>
+    <string name="label_login_here">Login Here</string>
+    <string name="label_send_email">SEND EMAIL</string>
+    <string name="hint_fullName">full name</string>
+    <string name="hint_phoneNumber">phone no</string>
+    <string name="hint_postalAddress">postal address</string>
+    <string name="btn_label_add">ADD</string>
+    <string name="tv_label_user_info">Provide user details</string>
+</resources>
