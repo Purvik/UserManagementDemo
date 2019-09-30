@@ -15,7 +15,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.student.usermanagementdemo.R;
+import com.student.usermanagementdemo.entities.User;
 import com.student.usermanagementdemo.utils.AppHelpers;
 
 import androidx.annotation.NonNull;
@@ -31,7 +37,10 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isValidEmail;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private FirebaseDatabase firebaseDatabase;
+    DatabaseReference userReference;
     private ProgressBar progressBar;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        userReference = firebaseDatabase.getReference("users");
 
         findViewById();
 
@@ -87,10 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             firebaseUser = firebaseAuth.getCurrentUser();
                             if (firebaseUser.isEmailVerified()) {
-                                Intent intent = new Intent(LoginActivity.this, UserInformationActivity.class)
-                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                intent.putExtra("email", email);
-                                startActivity(intent);
+                                checkForUserInfoRegistration(email);
                             } else {
                                 firebaseAuth.signOut();
                                 Toast.makeText(getApplicationContext(), "Please verify your email from mail we've sent at time of registration.", Toast.LENGTH_LONG).show();
@@ -101,6 +109,40 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    /* This method checks if email id is already available with user information on Firebase Database */
+    private void checkForUserInfoRegistration(final String email) {
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean isAvail = false;
+                for(DataSnapshot postSnashot: dataSnapshot.getChildren()){
+                    user = postSnashot.getValue(User.class);
+                    if(user.getEmail().equalsIgnoreCase(email)){
+                        isAvail = true;
+                        break;
+                    }
+                }
+                if (isAvail) {
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, UserInformationActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(getApplicationContext(), "Something went wrong, try again", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void findViewById() {

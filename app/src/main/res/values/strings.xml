@@ -13,4 +13,12 @@
     <string name="hint_postalAddress">postal address</string>
     <string name="btn_label_add">ADD</string>
     <string name="tv_label_user_info">Provide user details</string>
+    <string name="menu_label_sign_out">Sign out</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hint_business_name">business name</string>
+    <string name="hint_business_address">business address</string>
+    <string name="hint_business_contact">business contact</string>
+    <string name="hint_business_email">business email</string>
+    <string name="hint_business_owner_name">owner nme</string>
+    <string name="hint_business_owner_address">owner address</string>
 </resources>

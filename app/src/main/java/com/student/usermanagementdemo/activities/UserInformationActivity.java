@@ -56,7 +56,7 @@ public class UserInformationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "User details stored.", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(UserInformationActivity.this, MainActivity.class)
+                            startActivity(new Intent(UserInformationActivity.this, HomeActivity.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         } else {
                             Toast.makeText(getApplicationContext(), "Something went wrong, try again..", Toast.LENGTH_LONG).show();
